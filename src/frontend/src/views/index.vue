@@ -3,7 +3,7 @@
     <header class="header">
       <div class="header__logo">
         <a href="index.html" class="logo">
-          <img src="img/logo.svg" alt="V!U!E! Pizza logo" width="90" height="40">
+          <img src="@/assets/img/logo.svg" alt="V!U!E! Pizza logo" width="90" height="40">
         </a>
       </div>
       <div class="header__cart">
@@ -92,7 +92,7 @@
                       v-bind:key="ing.id"
                       class="ingredients__item"
                     >
-                      <span class="filling filling--cheddar">{{ing.name}}</span>
+                      <span v-bind:class="'filling filling--' + ing.image.split('/').at(-1).split('.')[0]">{{ing.name}}</span>
 
                       <div class="counter counter--orange ingredients__counter">
                         <button type="button" class="counter__button counter__button--minus" disabled>
