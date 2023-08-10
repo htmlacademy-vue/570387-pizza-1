@@ -1,7 +1,7 @@
 <template>
   <div>
-    <AppLayout :price="5000"/>
     <main class="content">
+      <router-view />
       <form action="#" method="post">
 
         <div class="content__wrapper">
@@ -52,8 +52,6 @@ import { MAX_INGREDIENTS_VALUE } from "@/common/const";
 import {DoughMap, SizeMap, SauceMap, IngredientMap} from "@/common/const.js";
 import {dough,ingredients,sauces,sizes} from "@/static/pizza.json";
 import {prepareDetails, prepareIngredients,  getCartItems, setCartItems} from "@/common/utils.js";
-
-import AppLayout from "@/layouts/AppLayout.vue";
 import BuilderDoughSelector from "@/modules/builder/components/BuilderDoughSelector.vue"
 import BuilderSizeSelector from "@/modules/builder/components/BuilderSizeSelector.vue"
 import BuilderSauceSelector from "@/modules/builder/components/BuilderSauceSelector.vue"
@@ -101,7 +99,6 @@ export default {
     },
   },
   components: {
-    AppLayout,
     BuilderDoughSelector,
     BuilderSizeSelector,
     BuilderSauceSelector,
@@ -110,6 +107,7 @@ export default {
   },
   mounted() {
     this.cartItems = getCartItems();
+    this.$emit("updateTotalPrice", this.totalPrice);
   },
   methods:{
     addToCart() {
@@ -123,6 +121,7 @@ export default {
       };
       this.cartItems = [...this.cartItems, newPizza];
       setCartItems(this.cartItems);
+      this.$emit("updateTotalPrice", this.totalPrice);
       this.pizzaName = "";
     },
     findSelectedItem(items) {
