@@ -4,7 +4,7 @@
     <SelectorItem
     v-for="sauce of sauces"
     :key ="sauce.id"
-    :item="sauce"
+    :value="sauce.value"
     :isChecked="sauce.isChecked"
     :inputName="'sauce'"
     :className="'radio ingredients__input'"

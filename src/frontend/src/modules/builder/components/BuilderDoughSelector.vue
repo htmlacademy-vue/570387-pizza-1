@@ -6,7 +6,7 @@
       <div class="sheet__content dough">
         <SelectorItem
           v-for="doughType in dough"
-          :item="doughType"
+          :value="doughType.value"
           :key="doughType.id"
           :isChecked="doughType.isChecked"
           :inputName="'dought'"
