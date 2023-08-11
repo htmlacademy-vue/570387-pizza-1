@@ -35,6 +35,7 @@ const routes = [
 ];
 
 const router = new VueRouter({
+  // при данной опции не работает почему-то. Спросить наставника.
   // mode: 'history',
   base: process.env.BASE_URL,
   routes
