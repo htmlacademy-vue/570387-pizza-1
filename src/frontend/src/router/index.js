@@ -9,13 +9,14 @@ const routes = [
     path: "/",
     name: "IndexHome",
     component: () => import("../views/index.vue"),
-    children: [
-      {
-        path: "/login",
-        name: "Login",
-        component: () => import("../views/Login.vue"),
-      },
-    ],
+    meta: {
+      layout: 'AppLayoutDefault' 
+    },
+  },
+  {
+    path: "/login",
+    name: "Login",
+    component: () => import("../views/Login.vue"),
   },
   {
     path: "/cart",
@@ -35,8 +36,7 @@ const routes = [
 ];
 
 const router = new VueRouter({
-  // при данной опции не работает почему-то. Спросить наставника.
-  // mode: 'history',
+  mode: 'history',
   base: process.env.BASE_URL,
   routes
 }); 
