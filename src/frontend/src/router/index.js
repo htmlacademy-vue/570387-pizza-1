@@ -10,7 +10,7 @@ const routes = [
     name: "IndexHome",
     component: () => import("../views/index.vue"),
     meta: {
-      layout: 'AppLayoutDefault' 
+      layout: 'AppLayoutMain' 
     },
   },
   {
