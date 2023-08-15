@@ -8,7 +8,7 @@ const routes = [
   {
     path: "/",
     name: "IndexHome",
-    component: () => import("../views/index.vue"),
+    component: () => import("../views/Index.vue"),
     meta: {
       layout: 'AppLayoutMain' 
     },

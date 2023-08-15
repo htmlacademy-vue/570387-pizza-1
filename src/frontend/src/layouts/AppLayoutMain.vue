@@ -1,7 +1,10 @@
 <template>
   <div class="app-layout-main">
     <AppLayoutHeader :price="price" :userData="userData" />
-    <slot />
+    <main class="content">
+      <slot />
+
+    </main>
   </div>
 </template>
 
