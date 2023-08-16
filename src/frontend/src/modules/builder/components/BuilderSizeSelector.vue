@@ -7,7 +7,7 @@
         <SelectorItem
         v-for="size of sizes"
         :key ="size.id"
-        :item="size"
+        :value="size.value"
         :isChecked="size.isChecked"
         :inputName="'diameter'"
         :className="'diameter__input diameter__input--' + size.value"

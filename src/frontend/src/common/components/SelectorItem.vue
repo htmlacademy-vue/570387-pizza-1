@@ -1,9 +1,9 @@
 <template>
   <RadioButton
     :class="className"
-    :value="item.value"
-    :isChecked="item.isChecked"
-    :inputName="`${inputName}`"
+    :value="value"
+    :isChecked="isChecked"
+    :inputName="inputName"
     @changeSelectedItem="$emit('changeSelectedItem', $event)"
   >
     <slot />
@@ -16,9 +16,13 @@ export default {
   name: "SelectorItem",
   components: { RadioButton },
   props: {
-    item: {
-      type: Object,
+    value: {
+      type: String,
       required: true,
+    },
+    isChecked: {
+      type: Boolean,
+      default: false,
     },
     inputName: {
       type: String,

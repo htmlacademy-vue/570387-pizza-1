@@ -1,44 +1,42 @@
 <template>
   <div>
-    <AppLayout :price="5000"/>
-    <main class="content">
-      <form action="#" method="post">
+    <router-view />
+    <form action="#" method="post">
 
-        <div class="content__wrapper">
-          <h1 class="title title--big">Конструктор пиццы</h1>
+      <div class="content__wrapper">
+        <h1 class="title title--big">Конструктор пиццы</h1>
 
-          <BuilderDoughSelector 
-            :dough="doughItems" 
+        <BuilderDoughSelector 
+          :dough="doughItems" 
+          @changeSelectedItem="changeSelectedItem"
+        />
+        <BuilderSizeSelector 
+          :sizes="sizeItems" 
+          @changeSelectedItem="changeSelectedItem"
+        />
+        
+        <BuilderIngredientsSelector 
+          :ingredients="ingredientItems" 
+          @changeIngredientValue="changeIngredientValue">
+          <BuilderSauceSelector 
+            :sauces="sauceItems" 
             @changeSelectedItem="changeSelectedItem"
           />
-          <BuilderSizeSelector 
-            :sizes="sizeItems" 
-            @changeSelectedItem="changeSelectedItem"
-          />
-          
-          <BuilderIngredientsSelector 
-            :ingredients="ingredientItems" 
-            @changeIngredientValue="changeIngredientValue">
-            <BuilderSauceSelector 
-              :sauces="sauceItems" 
-              @changeSelectedItem="changeSelectedItem"
-            />
-          </BuilderIngredientsSelector>
+        </BuilderIngredientsSelector>
 
-          <BuilderPizzaView
-            v-model="pizzaName"
-            :dough="selectedDough.value"
-            :sauce="selectedSauce.value"
-            :ingredients="selectedIngredients"
-            :price="pizzaPrice"
-            @addToCart="addToCart"
-            @addIngredient="addIngredient"
-          />
+        <BuilderPizzaView
+          v-model="pizzaName"
+          :dough="selectedDough.value"
+          :sauce="selectedSauce.value"
+          :ingredients="selectedIngredients"
+          :price="pizzaPrice"
+          @addToCart="addToCart"
+          @addIngredient="addIngredient"
+        />
 
-        </div>
+      </div>
 
-      </form>
-    </main>
+    </form>
   </div>
 </template>
 
@@ -52,8 +50,6 @@ import { MAX_INGREDIENTS_VALUE } from "@/common/const";
 import {DoughMap, SizeMap, SauceMap, IngredientMap} from "@/common/const.js";
 import {dough,ingredients,sauces,sizes} from "@/static/pizza.json";
 import {prepareDetails, prepareIngredients,  getCartItems, setCartItems} from "@/common/utils.js";
-
-import AppLayout from "@/layouts/AppLayout.vue";
 import BuilderDoughSelector from "@/modules/builder/components/BuilderDoughSelector.vue"
 import BuilderSizeSelector from "@/modules/builder/components/BuilderSizeSelector.vue"
 import BuilderSauceSelector from "@/modules/builder/components/BuilderSauceSelector.vue"
@@ -101,7 +97,6 @@ export default {
     },
   },
   components: {
-    AppLayout,
     BuilderDoughSelector,
     BuilderSizeSelector,
     BuilderSauceSelector,
@@ -110,6 +105,7 @@ export default {
   },
   mounted() {
     this.cartItems = getCartItems();
+    this.$emit("updateTotalPrice", this.totalPrice);
   },
   methods:{
     addToCart() {
@@ -123,6 +119,7 @@ export default {
       };
       this.cartItems = [...this.cartItems, newPizza];
       setCartItems(this.cartItems);
+      this.$emit("updateTotalPrice", this.totalPrice);
       this.pizzaName = "";
     },
     findSelectedItem(items) {

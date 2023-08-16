@@ -1,16 +1,31 @@
 <template>
-  <Index />
+  <div id="app">
+    <AppLayout :price="totalPrice" :userData="userData">
+      <router-view @updateTotalPrice="updateTotalPrice" />
+    </AppLayout>
+  </div>
 </template>
 
 <script>
-import Index from "@/views/index.vue"
+import AppLayout from "@/layouts/AppLayout";
+
 export default {
   name: "App",
-  components: {
-    Index,
+  components: { AppLayout },
+  data() {
+    return {
+      userData: false,
+      totalPrice: 0,
+    };
+  },
+  methods: {
+    updateTotalPrice(price) {
+      this.totalPrice = price;
+    },
   },
 };
 </script>
+
 
 <style lang="scss">
 @import "~@/assets/scss/app";
