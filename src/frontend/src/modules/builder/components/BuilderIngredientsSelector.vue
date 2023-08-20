@@ -25,11 +25,14 @@
                 </AppDrag>
               </AppDrop>
               <ItemCounter
+              class="ingredients__counter"
                 :value="ingredient.value"
-                @changeIngredientValue="
-                  $emit('changeIngredientValue', {
+                :minValue="minIngredientValue"
+                :maxValue="maxIngredientValue"
+                @changeItemValue="
+                  changeIngredientValue( {
+                    ...ingredient,
                     value: $event,
-                    name: ingredient.name,
                   })
                 "
               />
@@ -42,7 +45,8 @@
 </template>
 
 <script>
-import { MAX_INGREDIENTS_VALUE } from "@/common/const";
+import { MIN_INGREDIENTS_VALUE, MAX_INGREDIENTS_VALUE } from "@/common/const";
+import { mapState, mapActions } from "vuex";
 import AppDrag from "@/common/components/AppDrag";
 import AppDrop from "@/common/components/AppDrop";
 import ItemCounter from "@/common/components/ItemCounter";
@@ -53,15 +57,19 @@ export default {
     AppDrag,
     AppDrop
   },
-  props: {
-    ingredients: {
-      type: Array,
-      required: true,
+  computed: {
+    ...mapState("Builder", ["ingredients"]),
+    minIngredientValue() {
+      return MIN_INGREDIENTS_VALUE;
+    },
+    maxIngredientValue() {
+      return MAX_INGREDIENTS_VALUE;
     },
   },
   methods: {
+    ...mapActions("Builder", ["changeIngredientValue"]),
     checkIsIngredientDraggable(ingredient) {
-      return ingredient.value < MAX_INGREDIENTS_VALUE;
+      return ingredient.value < this.maxIngredientValue;
     },
   },
 };
