@@ -12,9 +12,9 @@
         :inputName="'diameter'"
         :className="'diameter__input diameter__input--' + size.value"
         @changeSelectedItem="
-          $emit('changeSelectedItem', {
+          changeSelectedItem({
             newValue: $event.target.value,
-            items: sizes,
+            itemName: 'sizes',
           })
         ">
           <span>{{size.name}}</span>
@@ -26,15 +26,17 @@
 
 <script>
   import SelectorItem from "@/common/components/SelectorItem";
+  import { mapState, mapActions } from "vuex";
+
   export default {
     components: {
       SelectorItem,
     },
-    props: {
-      sizes: {
-        type: Array,
-        required: true,
-      }
-    }
+    computed: {
+      ...mapState("Builder", ["sizes"]),
+    },
+    methods: {
+      ...mapActions("Builder", ["changeSelectedItem"]),
+    },
   }
 </script>

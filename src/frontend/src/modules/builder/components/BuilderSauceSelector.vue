@@ -9,9 +9,9 @@
     :inputName="'sauce'"
     :className="'radio ingredients__input'"
     @changeSelectedItem="
-      $emit('changeSelectedItem', {
+      changeSelectedItem( {
         newValue: $event.target.value,
-        items: sauces,
+        itemName: 'sauces',
       })
     ">
       <span>{{sauce.name}}</span>
@@ -21,15 +21,16 @@
 
 <script>
   import SelectorItem from "@/common/components/SelectorItem";
+  import { mapState, mapActions } from "vuex";
   export default {
     components: {
       SelectorItem,
     },
-    props: {
-      sauces: {
-        type: Array,
-        required: false,
-      }
-    }
+    computed: {
+    ...mapState("Builder", ["sauces"]),
+  },
+  methods: {
+    ...mapActions("Builder", ["changeSelectedItem"]),
+  },
   }
 </script>
