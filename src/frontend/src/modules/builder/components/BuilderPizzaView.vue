@@ -6,6 +6,7 @@
         type="text"
         name="pizza_name"
         placeholder="Введите название пиццы"
+        required
         :value="pizzaName"
         @input="setPizzaName($event.target.value)"
       />
@@ -16,14 +17,32 @@
         <div :class="['pizza', pizzaClassName]">
           <div class="pizza__wrapper">
             <div
-              v-for="ingredient in currentPizza.ingredients"
-              :key="ingredient.name"
-              class="pizza__filling"
-              :class="[
-                `pizza__filling--${ingredient.englishName}`,
-                getIngredientClassName(ingredient.value),
-              ]"
-            ></div>
+              v-for="ingredients in selectedIngredients"
+              :key="ingredients.name"
+            >
+            <div
+              v-for="i in ingredients.quantity"
+              :key="i"
+              :class="`pizza__filling 
+                       pizza__filling--${quantityIngridientsClassName(i)} 
+                       pizza__filling--${ingredients.englishName}`"
+            >
+            </div>
+              <!-- <div
+                class="pizza__filling"
+                :class="`pizza__filling--${ingredient.englishName}`"
+              ></div>
+              <div
+                v-if="ingredient.quantity >= 2"
+                class="pizza__filling pizza__filling--second"
+                :class="`pizza__filling--${ingredient.englishName}`"
+              ></div>
+              <div
+                v-if="ingredient.quantity === 3"
+                class="pizza__filling pizza__filling--third"
+                :class="`pizza__filling--${ingredient.englishName}`"
+              ></div> -->
+            </div>
           </div>
         </div>
       </div>
@@ -34,39 +53,54 @@
 </template>
 
 <script>
-import { MAX_INGREDIENTS_VALUE } from "@/common/const";
+import { MAX_INGREDIENTS_VALUE, QuantityIngridientsClassMap } from "@/common/const";
 import { mapState, mapActions, mapGetters } from "vuex";
 import AppDrop from "@/common/components/AppDrop";
 import BuilderPriceCounter from "@/modules/builder/components/BuilderPriceCounter";
+
 export default {
   name: "BuilderPizzaView",
   components: { AppDrop, BuilderPriceCounter },
+
   computed: {
     ...mapState("Builder", ["pizzaName"]),
-    ...mapGetters("Builder", ["currentPizza"]),
+
+    ...mapGetters("Builder", [
+      "isPizzaDataLoading",
+      "selectedDough",
+      "selectedSauce",
+      "selectedIngredients",
+    ]),
+
     pizzaClassName() {
-      const dough = this.currentPizza.dough.value === "large" ? "big" : "small";
-      return `pizza--foundation--${dough}-${this.currentPizza.sauce.value}`;
+      if (this.isPizzaDataLoading) {
+        return "";
+      }
+
+      const dough = this.selectedDough.value === "large" ? "big" : "small";
+      const sauce = this.selectedSauce.value;
+
+      return `pizza--foundation--${dough}-${sauce}`;
     },
   },
+
   methods: {
-    ...mapActions("Builder", ["setPizzaName", "changeIngredientValue"]),
-    getIngredientClassName(value) {
-      if (value < 2) {
-        return;
-      }
-      return value === MAX_INGREDIENTS_VALUE
-        ? `pizza__filling--third`
-        : `pizza__filling--second`;
-    },
+    ...mapActions("Builder", ["setPizzaName", "changeIngredientQuantity"]),
+
     addIngredient(ingredient) {
-      if (ingredient.value !== MAX_INGREDIENTS_VALUE) {
-        this.changeIngredientValue({
+      if (ingredient.quantity !== MAX_INGREDIENTS_VALUE) {
+        this.changeIngredientQuantity({
           ...ingredient,
-          value: ingredient.value + 1,
+          quantity: ingredient.quantity + 1,
         });
       }
     },
+
+    quantityIngridientsClassName (number) {
+      return QuantityIngridientsClassMap[number]
+    }
   },
 };
 </script>
+
+<style lang="scss" scoped></style>

@@ -1,44 +1,36 @@
 import Vue from "vue";
-import VueRouter from "vue-router";
+import Router from "vue-router";
+import routes from "@/router/routes";
+import store from "@/store";
+import { middlewarePipeline } from "@/middlewares";
 
-Vue.use(VueRouter);
+Vue.use(Router);
 
-
-const routes = [
-  {
-    path: "/",
-    name: "IndexHome",
-    component: () => import("../views/Index.vue"),
-    meta: {
-      layout: 'AppLayoutMain' 
-    },
-  },
-  {
-    path: "/login",
-    name: "Login",
-    component: () => import("../views/Login.vue"),
-  },
-  {
-    path: "/cart",
-    name: "Cart",
-    component: () => import("../views/Cart.vue"),
-  },
-  {
-    path: "/orders",
-    name: "Orders",
-    component: () => import("../views/Orders.vue"),
-  },
-  {
-    path: "/profile",
-    name: "Profile",
-    component: () => import("../views/Profile.vue"),
-  },
-];
-
-const router = new VueRouter({
-  mode: 'history',
+const router = new Router({
   base: process.env.BASE_URL,
-  routes
-}); 
+  mode: "history",
+  routes,
+});
+
+router.beforeEach((to, from, next) => {
+  const middlewares = to.meta.middlewares;
+
+  if (!middlewares?.length) {
+    return next();
+  }
+
+  const context = { to, from, next, store };
+  const firstMiddlewareIndex = 0;
+  const nextMiddlewareIndex = 1;
+
+  return middlewares[firstMiddlewareIndex]({
+    ...context,
+    nextMiddleware: middlewarePipeline(
+      context,
+      middlewares,
+      nextMiddlewareIndex
+    ),
+  });
+});
 
 export default router;

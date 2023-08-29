@@ -1,17 +1,10 @@
-import { cloneDeep } from "lodash";
 import {
   SET_ENTITY,
   UPDATE_ENTITY,
+  EDIT_PIZZA,
   RESET_BUILDER_STATE,
 } from "@/store/mutation-types";
-import pizza from "@/static/pizza.json";
-import {
-  capitalize,
-  prepareDetails,
-  prepareIngredients,
-  findSelectedItem,
-} from "@/common/utils";
-import { DoughMap, SauceMap, SizeMap, IngredientMap } from "@/common/const";
+import { capitalize, changeCheckedItem } from "@/common/utils";
 
 const module = capitalize("builder");
 
@@ -22,52 +15,90 @@ const initialState = () => ({
   ingredients: [],
   pizzaName: "",
   pizzaId: null,
+  pizzaQuantity: 1,
 });
 
 export default {
   namespaced: true,
   state: initialState(),
+
   getters: {
-    currentPizza({ dough, sauces, sizes, ingredients, pizzaName, pizzaId }) {
+    isPizzaDataLoading(state) {
+      return (
+        !state.dough.length ||
+        !state.sauces.length ||
+        !state.sizes.length ||
+        !state.ingredients.length
+      );
+    },
+
+    selectedDough(state) {
+      return state.dough.find((item) => item.isChecked);
+    },
+
+    selectedSauce(state) {
+      return state.sauces.find((item) => item.isChecked);
+    },
+
+    selectedSize(state) {
+      return state.sizes.find((item) => item.isChecked);
+    },
+
+    selectedIngredients(state) {
+      return state.ingredients.filter((item) => item.quantity > 0);
+    },
+
+    pizzaPrice(state, getters) {
+      const doughPrice = getters.selectedDough.price;
+      const saucePrice = getters.selectedSauce.price;
+      const multiplier = getters.selectedSize.multiplier;
+      const ingredientsSum = getters.selectedIngredients
+        .map((item) => item.price * item.quantity)
+        .reduce((a, b) => a + b, 0);
+
+      return (doughPrice + saucePrice + ingredientsSum) * multiplier;
+    },
+
+    currentPizza(state, getters) {
       return {
-        dough: findSelectedItem(dough),
-        sauce: findSelectedItem(sauces),
-        size: findSelectedItem(sizes),
-        ingredients: ingredients.filter((item) => item.value > 0),
-        name: pizzaName,
-        id: pizzaId,
-        value: 1,
+        doughId: getters.selectedDough.id,
+        sauceId: getters.selectedSauce.id,
+        sizeId: getters.selectedSize.id,
+        ingredients: getters.selectedIngredients.map((ingredient) => {
+          return {
+            ingredientId: ingredient.id,
+            quantity: ingredient.quantity,
+          };
+        }),
+        name: state.pizzaName,
+        id: state.pizzaId,
+        quantity: state.pizzaQuantity,
+        price: getters.pizzaPrice,
       };
     },
-    pizzaPrice(state, getters) {
-      const ingredientsPrices = getters.currentPizza.ingredients.map(
-        (item) => item.price * item.value
-      );
-      const ingredientsSum = ingredientsPrices.reduce((a, b) => a + b, 0);
-      return (
-        (getters.currentPizza.dough.price +
-          getters.currentPizza.sauce.price +
-          ingredientsSum) *
-        getters.currentPizza.size.multiplier
-      );
-    },
   },
+
   mutations: {
     [RESET_BUILDER_STATE](state) {
       Object.assign(state, initialState());
     },
+    [EDIT_PIZZA](state, newState) {
+      Object.assign(state, newState());
+    },
   },
+
   actions: {
     resetBuilderState({ commit }) {
-      commit(RESET_BUILDER_STATE, { root: true });
+      commit(RESET_BUILDER_STATE);
     },
-    fetchPizzaParts({ commit }) {
-      const dough = pizza.dough.map((item) => prepareDetails(DoughMap, item));
-      const sauces = pizza.sauces.map((item) => prepareDetails(SauceMap, item));
-      const sizes = pizza.sizes.map((item) => prepareDetails(SizeMap, item));
-      const ingredients = pizza.ingredients.map((item) =>
-        prepareIngredients(IngredientMap, item)
-      );
+
+    async fetchPizzaParts({ commit }) {
+      const dough = await this.$api.builder.fetchDough();
+      const sauces = await this.$api.builder.fetchSauces();
+      const sizes = await this.$api.builder.fetchSizes();
+      const ingredients = await this.$api.builder.fetchIngredients();
+
+
       commit(
         SET_ENTITY,
         {
@@ -105,6 +136,7 @@ export default {
         { root: true }
       );
     },
+
     setPizzaName({ commit }, name) {
       commit(
         SET_ENTITY,
@@ -116,22 +148,10 @@ export default {
         { root: true }
       );
     },
-    setPizzaId({ commit }, id) {
-      commit(
-        SET_ENTITY,
-        {
-          module,
-          entity: "pizzaId",
-          value: id,
-        },
-        { root: true }
-      );
-    },
-    changeSelectedItem({ state, commit }, { newValue, itemName }) {
-      const data = cloneDeep(state[itemName]);
-      data.find((el) => el.isChecked).isChecked = false;
-      data.find((el) => el.value === newValue).isChecked = true;
-      
+
+    changeSelectedItem({ state, commit }, { id, itemName }) {
+      const data = changeCheckedItem(state[itemName], id);
+
       commit(
         SET_ENTITY,
         {
@@ -142,7 +162,8 @@ export default {
         { root: true }
       );
     },
-    changeIngredientValue({ commit }, ingredient) {
+
+    changeIngredientQuantity({ commit }, ingredient) {
       commit(
         UPDATE_ENTITY,
         {
@@ -152,6 +173,31 @@ export default {
         },
         { root: true }
       );
+    },
+
+    editPizza({ state, commit }, pizza) {
+      const newState = () => {
+        return {
+          dough: changeCheckedItem(state.dough, pizza.doughId),
+          sauces: changeCheckedItem(state.sauces, pizza.sauceId),
+          sizes: changeCheckedItem(state.sizes, pizza.sizeId),
+          ingredients: state.ingredients.map((ingredient) => {
+            const item = pizza.ingredients.find(
+              (item) => item.ingredientId === ingredient.id
+            );
+
+            return {
+              ...ingredient,
+              quantity: item ? item.quantity : 0,
+            };
+          }),
+          pizzaName: pizza.name,
+          pizzaId: pizza.id,
+          pizzaQuantity: pizza.quantity,
+        };
+      };
+
+      commit(EDIT_PIZZA, newState);
     },
   },
 };
