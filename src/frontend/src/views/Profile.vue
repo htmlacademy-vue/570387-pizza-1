@@ -4,7 +4,7 @@
       <h1 class="title title--big">Мои данные</h1>
     </div>
 
-    <ProfileUserBlock />
+    <ProfileUserBlock v-if="user"/>
 
     <div v-for="address in addresses" :key="address.id" class="layout__address">
       <ProfileAddressForm
