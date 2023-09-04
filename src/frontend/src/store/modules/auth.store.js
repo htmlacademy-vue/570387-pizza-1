@@ -24,6 +24,7 @@ export default {
         { module: "Auth", entity: "user", value: null },
         { root: true }
       );
+      
     },
 
     async getMe({ commit, dispatch }) {

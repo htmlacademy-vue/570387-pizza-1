@@ -77,7 +77,9 @@
       >
         Удалить
       </button>
-      <button type="submit" class="button">Сохранить</button>
+      <button type="button" class="button"
+        @click="saveAddress()"      
+      >Сохранить</button>
     </div>
   </form>
 </template>
@@ -149,7 +151,7 @@ export default {
   },
   methods: {
     ...mapActions("Addresses", ["addAddress", "editAddress", "deleteAddress"]),
-    saveAddress($event) {
+    saveAddress() {
       if (
         !this.$validateFields(
           {
@@ -175,7 +177,8 @@ export default {
       } else {
         this.addAddress(address);
       }
-      $event.target.submit();
+      this.$emit('closeAddressForm')
+      
     },
   },
 };

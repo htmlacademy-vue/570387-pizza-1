@@ -28,20 +28,6 @@
                        pizza__filling--${ingredients.englishName}`"
             >
             </div>
-              <!-- <div
-                class="pizza__filling"
-                :class="`pizza__filling--${ingredient.englishName}`"
-              ></div>
-              <div
-                v-if="ingredient.quantity >= 2"
-                class="pizza__filling pizza__filling--second"
-                :class="`pizza__filling--${ingredient.englishName}`"
-              ></div>
-              <div
-                v-if="ingredient.quantity === 3"
-                class="pizza__filling pizza__filling--third"
-                :class="`pizza__filling--${ingredient.englishName}`"
-              ></div> -->
             </div>
           </div>
         </div>
@@ -53,7 +39,7 @@
 </template>
 
 <script>
-import { MAX_INGREDIENTS_VALUE, QuantityIngridientsClassMap } from "@/common/const";
+import { MAX_INGREDIENTS_VALUE, QuantityIngredientsClassMap } from "@/common/const";
 import { mapState, mapActions, mapGetters } from "vuex";
 import AppDrop from "@/common/components/AppDrop";
 import BuilderPriceCounter from "@/modules/builder/components/BuilderPriceCounter";
@@ -97,7 +83,7 @@ export default {
     },
 
     quantityIngridientsClassName (number) {
-      return QuantityIngridientsClassMap[number]
+      return QuantityIngredientsClassMap[number]
     }
   },
 };

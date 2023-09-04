@@ -9,7 +9,7 @@ const rules = {
   email: {
     rule: (value) =>
       value ? emailRegex.test(String(value).toLowerCase()) : true,
-    message: "Электроная почта имеет неверный формат",
+    message: "Электронная почта имеет неверный формат",
   },
 };
 

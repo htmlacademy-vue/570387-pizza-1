@@ -46,7 +46,7 @@ export const IngredientMap = {
   "Блю чиз": "blue_cheese",
 };
 
-export const QuantityIngridientsClassMap = {
+export const QuantityIngredientsClassMap = {
   1: "",
   2: "second",
   3: "third",
