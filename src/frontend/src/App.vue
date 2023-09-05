@@ -7,12 +7,16 @@
 </template>
 
 <script>
+import { setAuth } from "@/common/utils";
 import AppLayout from "@/layouts/AppLayout";
 
 export default {
   name: "App",
   components: { AppLayout },
   created() {
+    if (this.$jwt.getToken()) {
+      setAuth(this.$store);
+    }
     this.$store.dispatch("init");
   }
 };

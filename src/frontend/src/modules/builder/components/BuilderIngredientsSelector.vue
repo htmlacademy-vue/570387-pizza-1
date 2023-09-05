@@ -5,7 +5,6 @@
 
       <div class="sheet__content ingredients">
         <slot />
-
         <div class="ingredients__filling">
           <p>Начинка:</p>
 
@@ -15,7 +14,6 @@
               :key="ingredient.id"
               class="ingredients__item"
             >
-              
               <AppDrop @drop="$emit('drop', ingredient)">
                 <AppDrag
                   :transfer-data="ingredient"
@@ -25,14 +23,14 @@
                 </AppDrag>
               </AppDrop>
               <ItemCounter
-              class="ingredients__counter"
-                :value="ingredient.value"
+                class="ingredients__counter"
+                :value="ingredient.quantity"
                 :minValue="minIngredientValue"
                 :maxValue="maxIngredientValue"
                 @changeItemValue="
-                  changeIngredientValue( {
+                  changeIngredientQuantity({
                     ...ingredient,
-                    value: $event,
+                    quantity: $event,
                   })
                 "
               />
@@ -50,6 +48,7 @@ import { mapState, mapActions } from "vuex";
 import AppDrag from "@/common/components/AppDrag";
 import AppDrop from "@/common/components/AppDrop";
 import ItemCounter from "@/common/components/ItemCounter";
+
 export default {
   name: "BuilderIngredientsSelector",
   components: {
@@ -62,14 +61,16 @@ export default {
     minIngredientValue() {
       return MIN_INGREDIENTS_VALUE;
     },
+
     maxIngredientValue() {
       return MAX_INGREDIENTS_VALUE;
     },
   },
+
   methods: {
-    ...mapActions("Builder", ["changeIngredientValue"]),
+    ...mapActions("Builder", ["changeIngredientQuantity"]),
     checkIsIngredientDraggable(ingredient) {
-      return ingredient.value < this.maxIngredientValue;
+      return ingredient.quantity < this.maxIngredientValue;
     },
   },
 };

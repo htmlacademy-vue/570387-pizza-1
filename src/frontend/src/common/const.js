@@ -5,7 +5,12 @@ export const MIN_INGREDIENTS_VALUE = 0;
 export const MAX_INGREDIENTS_VALUE = 3;
 
 export const MIN_CART_ITEM_VALUE = 0;
-export const MAX_CART_ITEM_VALUE = 10;
+export const MAX_CART_ITEM_VALUE = Infinity;
+
+export const MESSAGE_LIVE_TIME = 3000;
+
+/* eslint-disable */
+export const emailRegex = /^(([^<>()\[\]\\.,;:\s@"]+(\.[^<>()\[\]\\.,;:\s@"]+)*)|(".+"))@((\[[0-9]{1,3}\.[0-9]{1,3}\.[0-9]{1,3}\.[0-9]{1,3}])|(([a-zA-Z\-0-9]+\.)+[a-zA-Z]{2,}))$/;
 
 export const DoughMap = {
   Тонкое: "light",
@@ -39,4 +44,10 @@ export const IngredientMap = {
   Моцарелла: "mozzarella",
   Пармезан: "parmesan",
   "Блю чиз": "blue_cheese",
+};
+
+export const QuantityIngredientsClassMap = {
+  1: "",
+  2: "second",
+  3: "third",
 };

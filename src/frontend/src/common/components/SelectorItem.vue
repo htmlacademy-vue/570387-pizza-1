@@ -1,10 +1,10 @@
 <template>
   <RadioButton
-    :class="className"
+  :class="className"
     :value="value"
     :isChecked="isChecked"
     :inputName="inputName"
-    @changeSelectedItem="$emit('changeSelectedItem', $event)"
+    @change="$emit('changeSelectedItem')"
   >
     <slot />
   </RadioButton>
@@ -35,5 +35,3 @@ export default {
   },
 };
 </script>
-
-<style lang="scss" scoped></style>

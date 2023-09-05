@@ -26,19 +26,23 @@
 <script>
 export default {
   name: "ItemCounter",
+
   props: {
     value: {
       type: Number,
       required: true,
     },
+
     minValue: {
       type: Number,
       required: true,
     },
+
     maxValue: {
       type: Number,
       required: true,
     },
+
     isOrangeBtn: {
       type: Boolean,
       default: false,
@@ -53,16 +57,11 @@ export default {
     isMinusBtnDisabled() {
       return this.value === this.minValue;
     },
+
     isPlusBtnDisabled() {
       return this.value === this.maxValue;
     },
-  },
-  watch: {
-    value(newValue) {
-      this.counter = newValue;
-    },
-  },
-  methods: {
+  },  methods: {
     addItem() {
       this.counter++;
       this.$emit("changeItemValue", this.counter);
