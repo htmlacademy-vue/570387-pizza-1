@@ -6,14 +6,14 @@
       <div class="sheet__content dough">
         <SelectorItem
           v-for="doughType in dough"
-          :value="doughType.value"
           :key="doughType.id"
+          :value="doughType.value"
           :isChecked="doughType.isChecked"
           :inputName="'dought'"
-          :className="'dough__input dough__input--' + doughType.value"
+          :className="`dough__input dough__input--${doughType.value}`"
           @changeSelectedItem="
             changeSelectedItem({
-              newValue: $event.target.value,
+              id: doughType.id,
               itemName: 'dough',
             })
           "
@@ -33,13 +33,13 @@ import { mapState, mapActions } from "vuex";
 export default {
   name: "BuilderDoughSelector",
   components: { SelectorItem },
+
   computed: {
     ...mapState("Builder", ["dough"]),
   },
+
   methods: {
     ...mapActions("Builder", ["changeSelectedItem"]),
   },
 };
 </script>
-
-<style lang="scss" scoped></style>

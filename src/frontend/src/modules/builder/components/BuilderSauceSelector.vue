@@ -10,7 +10,7 @@
     :className="'radio ingredients__input'"
     @changeSelectedItem="
       changeSelectedItem( {
-        newValue: $event.target.value,
+        id: sauce.id,
         itemName: 'sauces',
       })
     ">

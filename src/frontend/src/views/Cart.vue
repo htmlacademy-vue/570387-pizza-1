@@ -1,44 +1,34 @@
 <template>
   <div>
-    <form action="#" method="post" class="layout-form">
+    <form class="layout-form" @submit.prevent="makeNewOrder">
       <main class="content cart">
         <div class="container">
           <div class="cart__title">
             <h1 class="title title--big">Корзина</h1>
           </div>
 
-          <div v-if="isCartEmpty" class="sheet cart__empty">
+          <div v-if="isCartEmpty" key="cart-empty" class="sheet cart__empty">
             <p>В корзине нет ни одного товара</p>
           </div>
 
-          <div v-else>
+          <div v-else key="cart-items">
             <CartProductList />
 
             <CartAdditionalList />
 
-            <CartOrderForm />
+            <CartOrderForm
+              :reorder-address-id="addressId"
+              :validations="validations"
+              @setAddress="setAddress"
+            />
           </div>
         </div>
       </main>
 
-      <CartFooter
-        v-if="!isCartEmpty"
-        @moreBtnClicked="goToBuilderPage"
-        @submitBtnClicked="showDialog($event)"
-      />
+      <CartFooter v-if="!isCartEmpty" />
     </form>
-    <div class="popup" v-if="isOrderPopupDisplayed">
-      <a class="close" @click="finishOrder">
-        <span class="visually-hidden">Закрыть попап</span>
-      </a>
-      <div class="popup__title">
-        <h2 class="title">Спасибо за заказ</h2>
-      </div>
-      <p>Мы начали готовить Ваш заказ, скоро привезём его вам ;)</p>
-      <div class="popup__button">
-        <a class="button" @click="finishOrder">Отлично, я жду!</a>
-      </div>
-    </div>
+
+    <CartOrderPopup v-if="isOrderPopupDisplayed" @close="closePopup" />
   </div>
 </template>
 
@@ -47,19 +37,37 @@ import { mapActions, mapState } from "vuex";
 import CartProductList from "@/modules/cart/components/CartProductList";
 import CartAdditionalList from "@/modules/cart/components/CartAdditionalList";
 import CartOrderForm from "@/modules/cart/components/CartOrderForm";
+import CartOrderPopup from "@/modules/cart/components/CartOrderPopup";
 import CartFooter from "@/modules/cart/components/CartFooter";
-
+import { validator } from "@/common/mixins";
 export default {
   name: "Cart",
   components: {
     CartProductList,
     CartAdditionalList,
     CartOrderForm,
+    CartOrderPopup,
     CartFooter,
   },
-  data: () => ({
-    isOrderPopupDisplayed: false,
-  }),
+  mixins: [validator],
+  data() {
+    return {
+      isOrderPopupDisplayed: false,
+      address: null,
+      addressId: null,
+      phone: "",
+      validations: {
+        street: {
+          error: "",
+          rules: ["required"],
+        },
+        building: {
+          error: "",
+          rules: ["required"],
+        },
+      },
+    };
+  },
   computed: {
     ...mapState("Cart", ["pizzaItems", "additionalItems"]),
     ...mapState("Auth", ["user"]),
@@ -67,41 +75,77 @@ export default {
       return this.pizzaItems.length === 0;
     },
   },
-  mounted() {
-    if (this.additionalItems.length === 0) {
-      this.fetchAdditionalItems();
-    }
+  watch: {
+    isCartEmpty(val) {
+      if (val) {
+        this.resetCartState();
+        this.fetchAdditionalItems();
+      }
+    },
   },
-  updated() {
-    if (this.pizzaItems.length === 0) {
-      this.fetchAdditionalItems();
-    }
+  async mounted() {
+    this.addressId = this.$route.params.addressId;
   },
   methods: {
     ...mapActions("Builder", ["resetBuilderState", "fetchPizzaParts"]),
-    ...mapActions("Cart", [
-      "resetCartState",
-      "fetchAdditionalItems",
-      "setCartItems",
-    ]),
-    goToBuilderPage() {
-      this.$router.push({ name: "IndexHome" });
-    },
-    showDialog(event) {
-      event.preventDefault();
+    ...mapActions("Cart", ["resetCartState", "fetchAdditionalItems"]),
+    ...mapActions("Orders", ["createOrder"]),
+    async makeNewOrder() {
+      if (
+        this.address !== null &&
+        this.address.id === null &&
+        !this.$validateFields(
+          { street: this.address.street, building: this.address.building },
+          this.validations
+        )
+      ) {
+        return;
+      }
+      const order = {
+        userId: this.user ? this.user.id : null,
+        phone: this.phone,
+        address: this.address,
+        pizzas: this.normalizePizzas(),
+        misc: this.normalizeMisc(),
+      };
+      await this.createOrder(order);
       this.isOrderPopupDisplayed = true;
     },
-    finishOrder() {
+    normalizePizzas() {
+      return this.pizzaItems.map((pizza) => {
+        return {
+          name: pizza.name,
+          quantity: pizza.quantity,
+          doughId: pizza.doughId,
+          sauceId: pizza.sauceId,
+          sizeId: pizza.sizeId,
+          ingredients: pizza.ingredients.map((ingredient) => {
+            return {
+              ingredientId: ingredient.ingredientId,
+              quantity: ingredient.quantity,
+            };
+          }),
+        };
+      });
+    },
+    normalizeMisc() {
+      return this.additionalItems.map((item) => {
+        return {
+          miscId: item.id,
+          quantity: item.quantity,
+        };
+      });
+    },
+    async closePopup() {
       this.isOrderPopupDisplayed = false;
-      if (this.user) {
-        this.$router.push({ name: "Orders" });
-      } else {
-        this.$router.push({ name: "IndexHome" });
-      }
       this.resetBuilderState();
       this.resetCartState();
-      this.fetchPizzaParts();
-      localStorage.clear();
+      await this.fetchPizzaParts();
+      await this.$router.push({ name: this.user ? "Orders" : "IndexHome" });
+    },
+    setAddress({ phone, address }) {
+      this.phone = phone;
+      this.address = address;
     },
   },
 };

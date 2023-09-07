@@ -5,19 +5,20 @@
 
       <div class="sheet__content diameter">
         <SelectorItem
-        v-for="size of sizes"
-        :key ="size.id"
-        :value="size.value"
-        :isChecked="size.isChecked"
-        :inputName="'diameter'"
-        :className="'diameter__input diameter__input--' + size.value"
-        @changeSelectedItem="
-          changeSelectedItem({
-            newValue: $event.target.value,
-            itemName: 'sizes',
-          })
-        ">
-          <span>{{size.name}}</span>
+          v-for="size in sizes"
+          :key="size.id"
+          :value="size.value"
+          :item="size"
+          :input-name="'diameter'"
+          :className="`diameter__input diameter__input--${size.value}`"
+          @changeSelectedItem="
+            changeSelectedItem({
+              id: size.id,
+              itemName: 'sizes',
+            })
+          "
+        >
+          <span>{{ size.name }}</span>
         </SelectorItem>
       </div>
     </div>
@@ -25,18 +26,21 @@
 </template>
 
 <script>
-  import SelectorItem from "@/common/components/SelectorItem";
-  import { mapState, mapActions } from "vuex";
+import { mapState, mapActions } from "vuex";
+import SelectorItem from "@/common/components/SelectorItem";
 
-  export default {
-    components: {
-      SelectorItem,
-    },
-    computed: {
-      ...mapState("Builder", ["sizes"]),
-    },
-    methods: {
-      ...mapActions("Builder", ["changeSelectedItem"]),
-    },
-  }
+export default {
+  name: "BuilderSizeSelector",
+  components: { SelectorItem },
+
+  computed: {
+    ...mapState("Builder", ["sizes"]),
+  },
+
+  methods: {
+    ...mapActions("Builder", ["changeSelectedItem"]),
+  },
+};
 </script>
+
+<style lang="scss" scoped></style>

@@ -1,12 +1,11 @@
 <template>
   <div class="content__result">
-    <p>Итого: {{ pizzaPrice }} ₽</p>
+    <p>Итого: {{ price }} ₽</p>
     <button
       type="button"
       class="button"
-      :class="{ 'button--disabled': isBtnDisabled }"
       :disabled="isBtnDisabled"
-      @click="addToCart()"
+      @click="addToCart"
     >
       Готовьте!
     </button>
@@ -14,25 +13,41 @@
 </template>
 
 <script>
-import { mapState, mapActions, mapGetters } from "vuex";
+import { mapState, mapGetters, mapActions } from "vuex";
+
 export default {
   name: "BuilderPriceCounter",
+
   computed: {
     ...mapState("Builder", ["pizzaName"]),
-    ...mapGetters("Builder", ["currentPizza", "pizzaPrice"]),
+
+    ...mapGetters("Builder", [
+      "isPizzaDataLoading",
+      "pizzaPrice",
+      "currentPizza",
+      "selectedIngredients",
+    ]),
+
     isBtnDisabled() {
-      return !this.currentPizza.ingredients.length || !this.pizzaName;
+      return this.selectedIngredients.length === 0 || !this.pizzaName.trim();
+    },
+
+    price() {
+      return this.isPizzaDataLoading ? 0 : this.pizzaPrice;
     },
   },
+
   methods: {
     ...mapActions("Builder", ["resetBuilderState", "fetchPizzaParts"]),
     ...mapActions("Cart", ["addItem"]),
-    addToCart() {
-      this.addItem();
+
+    async addToCart() {
+      this.addItem(this.currentPizza);
       this.resetBuilderState();
-      this.fetchPizzaParts();
-      void this.$router.push({ name: "IndexHome" });
+      await this.fetchPizzaParts();
     },
   },
 };
 </script>
+
+<style lang="scss" scoped></style>

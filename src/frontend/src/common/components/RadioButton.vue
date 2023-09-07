@@ -6,7 +6,7 @@
       :name="inputName"
       type="radio"
       class="visually-hidden"
-      @change="$emit('changeSelectedItem', $event)"
+      @change="$emit('change')"
     />
     <slot />
   </label>
