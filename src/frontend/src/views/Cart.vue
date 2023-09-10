@@ -28,7 +28,9 @@
       <CartFooter v-if="!isCartEmpty" />
     </form>
 
-    <CartOrderPopup v-if="isOrderPopupDisplayed" @close="closePopup" />
+    <transition name="fade" @after-leave="leavePage">
+      <CartOrderPopup v-if="isOrderPopupDisplayed" @close="closePopup" />
+    </transition>
   </div>
 </template>
 
@@ -136,8 +138,10 @@ export default {
         };
       });
     },
-    async closePopup() {
+    closePopup() {
       this.isOrderPopupDisplayed = false;
+    },
+    async leavePage() {
       this.resetBuilderState();
       this.resetCartState();
       await this.fetchPizzaParts();
@@ -150,3 +154,14 @@ export default {
   },
 };
 </script>
+
+<style lang="scss" scoped>
+  .fade-enter-active,
+  .fade-leave-active {
+    transition: opacity 1s;
+  }
+  .fade-enter,
+  .fade-leave-to {
+    opacity: 0;
+  }
+</style>
