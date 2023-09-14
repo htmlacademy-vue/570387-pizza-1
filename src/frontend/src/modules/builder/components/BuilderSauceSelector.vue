@@ -2,19 +2,23 @@
   <div class="ingredients__sauce">
     <p>Основной соус:</p>
     <SelectorItem
-    v-for="sauce of sauces"
-    :key ="sauce.id"
-    :value="sauce.value"
-    :isChecked="sauce.isChecked"
-    :inputName="'sauce'"
-    :className="'radio ingredients__input'"
-    @changeSelectedItem="
-      changeSelectedItem( {
-        id: sauce.id,
-        itemName: 'sauces',
-      })
-    ">
-      <span>{{sauce.name}}</span>
+      v-for="sauce of sauces"
+      :key="sauce.id"
+      :value="sauce.value"
+      :is-checked="sauce.isChecked"
+      :input-name="'sauce'"
+      :class-name="'radio ingredients__input'"
+      data-test="sauce-input"
+      @changeSelectedItem="
+        changeSelectedItem( {
+          id: sauce.id,
+          itemName: 'sauces',
+        })
+      "
+    >
+      <span>
+        {{ sauce.name }}
+      </span>
     </SelectorItem>
   </div>
 </template>

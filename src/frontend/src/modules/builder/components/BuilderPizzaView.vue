@@ -12,7 +12,10 @@
       />
     </label>
 
-    <AppDrop @drop="addIngredient($event)">
+    <AppDrop 
+      data-test="pizza-wrapper"
+      @drop="addIngredient($event)"
+    >
       <div class="content__constructor">
         <div :class="['pizza', pizzaClassName]">
           <div class="pizza__wrapper">
@@ -22,14 +25,13 @@
                 :key="ingredients.name"
               >
                 <transition-group name="ingredient-element">
-                <div
-                  v-for="i in ingredients.quantity"
-                  :key="i"
-                  :class="`pizza__filling 
-                          pizza__filling--${quantityIngridientsClassName(i)} 
-                          pizza__filling--${ingredients.englishName}`"
-                >
-                </div>
+                  <div
+                    v-for="i in ingredients.quantity"
+                    :key="i"
+                    :class="`pizza__filling 
+                            pizza__filling--${quantityIngridientsClassName(i)} 
+                            pizza__filling--${ingredients.englishName}`"
+                  />
                 </transition-group>
               </div>
             </transition-group>

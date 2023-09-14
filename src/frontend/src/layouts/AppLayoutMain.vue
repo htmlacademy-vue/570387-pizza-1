@@ -4,7 +4,6 @@
     <AppLayoutHeader />
     <main class="content">
       <slot />
-
     </main>
   </div>
 </template>
