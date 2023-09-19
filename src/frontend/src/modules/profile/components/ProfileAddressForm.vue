@@ -73,13 +73,18 @@
         v-if="isAddressEdited"
         type="button"
         class="button button--transparent"
+        data-test="delete-button"
         @click="deleteAddress(address.id)"
       >
         Удалить
       </button>
-      <button type="button" class="button"
+      <button 
+        type="button" 
+        class="button"
         @click="saveAddress()"      
-      >Сохранить</button>
+      >
+        Сохранить
+      </button>
     </div>
   </form>
 </template>

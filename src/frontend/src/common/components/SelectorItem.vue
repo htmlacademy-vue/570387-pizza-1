@@ -1,9 +1,9 @@
 <template>
   <RadioButton
-  :class="className"
+    :class="className"
     :value="value"
-    :isChecked="isChecked"
-    :inputName="inputName"
+    :is-checked="isChecked"
+    :input-name="inputName"
     @change="$emit('changeSelectedItem')"
   >
     <slot />
