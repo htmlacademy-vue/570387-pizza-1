@@ -8,7 +8,12 @@
     >
       <span class="visually-hidden">Меньше</span>
     </button>
-    <input :value="value" type="text" name="counter" class="counter__input" />
+    <input 
+      :value="actualCounter()" 
+      type="text" 
+      name="counter" 
+      class="counter__input" 
+    />
     <button
       type="button"
       :class="[
@@ -50,7 +55,7 @@ export default {
   },
   data: function () {
     return {
-      counter: this.value,
+      counter: 0,
     };
   },
   computed: {
@@ -61,7 +66,12 @@ export default {
     isPlusBtnDisabled() {
       return this.value === this.maxValue;
     },
-  },  methods: {
+  },  
+  methods: {
+    actualCounter() {
+      this.counter = this.value
+      return this.counter
+    },
     addItem() {
       this.counter++;
       this.$emit("changeItemValue", this.counter);

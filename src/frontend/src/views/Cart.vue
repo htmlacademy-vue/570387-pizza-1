@@ -1,17 +1,34 @@
 <template>
   <div>
-    <form class="layout-form" @submit.prevent="makeNewOrder">
+    <form 
+      class="layout-form" 
+      data-test="order-form"
+      @submit.prevent="makeNewOrder"
+    >
       <main class="content cart">
         <div class="container">
           <div class="cart__title">
-            <h1 class="title title--big">Корзина</h1>
+            <h1 
+              class="title title--big"
+            >
+              Корзина
+            </h1>
           </div>
 
-          <div v-if="isCartEmpty" key="cart-empty" class="sheet cart__empty">
+          <div 
+            v-if="isCartEmpty" 
+            key="cart-empty" 
+            class="sheet cart__empty"
+            data-test="cart-empty"
+          >
             <p>В корзине нет ни одного товара</p>
           </div>
 
-          <div v-else key="cart-items">
+          <div 
+            v-else 
+            key="cart-items"
+            data-test="cart-items"
+          >
             <CartProductList />
 
             <CartAdditionalList />
@@ -19,16 +36,29 @@
             <CartOrderForm
               :reorder-address-id="addressId"
               :validations="validations"
+              data-test="address-form"
               @setAddress="setAddress"
             />
           </div>
         </div>
       </main>
 
-      <CartFooter v-if="!isCartEmpty" />
+      <CartFooter 
+        v-if="!isCartEmpty" 
+        data-test="cart-footer"
+      />
     </form>
 
-    <CartOrderPopup v-if="isOrderPopupDisplayed" @close="closePopup" />
+    <transition 
+      name="fade" 
+      @after-leave="leavePage"
+    >
+      <CartOrderPopup 
+        v-if="isOrderPopupDisplayed"
+        data-test="success-popup"
+        @close="closePopup" 
+      />
+    </transition>
   </div>
 </template>
 
@@ -136,10 +166,12 @@ export default {
         };
       });
     },
-    async closePopup() {
+    closePopup() {
       this.isOrderPopupDisplayed = false;
-      this.resetBuilderState();
-      this.resetCartState();
+    },
+    async leavePage() {
+      await this.resetBuilderState();
+      await this.resetCartState();
       await this.fetchPizzaParts();
       await this.$router.push({ name: this.user ? "Orders" : "IndexHome" });
     },
@@ -150,3 +182,14 @@ export default {
   },
 };
 </script>
+
+<style lang="scss" scoped>
+  .fade-enter-active,
+  .fade-leave-active {
+    transition: opacity 1s;
+  }
+  .fade-enter,
+  .fade-leave-to {
+    opacity: 0;
+  }
+</style>

@@ -1,7 +1,14 @@
 <template>
   <ul class="cart-list sheet">
-    <li v-for="pizza in pizzaItems" :key="pizza.id" class="cart-list__item">
-      <PizzaItem class="cart-list__product" :pizza="pizza" />
+    <li 
+      v-for="pizza in pizzaItems" 
+      :key="pizza.id" 
+      class="cart-list__item"
+    >
+      <PizzaItem 
+        class="cart-list__product" 
+        :pizza="pizza" 
+      />
 
       <ItemCounter
         class="cart-list__counter"
@@ -9,6 +16,7 @@
         :is-orange-btn="true"
         :min-value="minPizzaValue"
         :max-value="maxPizzaValue"
+        data-test="cart-list-counter"
         @changeItemValue="
           changePizzaQuantity({
             quantity: $event,
@@ -25,6 +33,7 @@
         <button
           type="button"
           class="cart-list__edit"
+          data-test="cart-list-edit"
           @click="setPizzaToBuilder(pizza)"
         >
           Изменить

@@ -7,7 +7,12 @@
         class="additional-list__item sheet"
       >
         <p class="additional-list__description">
-          <img width="39" height="60" :src="item.image" :alt="item.name" />
+          <img 
+            width="39" 
+            height="60" 
+            :src="item.image" 
+            :alt="item.name" 
+          />
           <span>{{ item.name }}</span>
         </p>
 
@@ -15,9 +20,10 @@
           <ItemCounter
             class="additional-list__counter"
             :value="item.quantity"
-            :isOrangeBtn="true"
-            :minValue="minItemValue"
-            :maxValue="maxItemValue"
+            :is-orange-btn="true"
+            :min-value="minItemValue"
+            :max-value="maxItemValue"
+            data-test="additional-list-counter"
             @changeItemValue="
               changeItemQuantity({
                 quantity: $event,

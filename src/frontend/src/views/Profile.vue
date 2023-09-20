@@ -1,25 +1,39 @@
 <template>
   <div class="layout__content">
     <div class="layout__title">
-      <h1 class="title title--big">Мои данные</h1>
+      <h1 
+        class="title title--big"
+      >
+        Мои данные
+      </h1>
     </div>
 
-    <ProfileUserBlock v-if="user"/>
+    <ProfileUserBlock v-if="user" />
 
-    <div v-for="address in addresses" :key="address.id" class="layout__address">
+    <div 
+      v-for="address in addresses" 
+      :key="address.id" 
+      class="layout__address"
+    >
       <ProfileAddressForm
         v-if="address.id === editableAddressId"
         :address="address"
+        data-test="address-form"
         @closeAddressForm="closeAddressForm"
       />
 
-      <div v-else class="sheet address-form">
+      <div 
+        v-else 
+        class="sheet address-form"
+        data-test="address-card"
+      >
         <div class="address-form__header">
           <b>Адрес №{{ address.id }}. {{ address.name }}</b>
           <div class="address-form__edit">
             <button
               type="button"
               class="icon"
+              data-test="edit-address-button"
               @click="openFormToEdit(address.id)"
             >
               <span class="visually-hidden">Изменить адрес</span>
@@ -31,14 +45,22 @@
       </div>
     </div>
 
-    <div v-if="isNewAddressFormDisplayed" class="layout__address">
-      <ProfileAddressForm :address="newAddressData" @closeAddressForm="closeAddressForm"/>
+    <div 
+      v-if="isNewAddressFormDisplayed" 
+      class="layout__address"
+    >
+      <ProfileAddressForm 
+        :address="newAddressData" 
+        data-test="new-address-form"
+        @closeAddressForm="closeAddressForm"
+      />
     </div>
 
     <div class="layout__button">
       <button
         type="button"
         class="button button--border"
+        data-test="add-address-button"
         @click="openNewAddressForm"
       >
         Добавить новый адрес

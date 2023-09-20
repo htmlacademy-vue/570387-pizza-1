@@ -12,23 +12,29 @@
       />
     </label>
 
-    <AppDrop @drop="addIngredient($event)">
+    <AppDrop 
+      data-test="pizza-wrapper"
+      @drop="addIngredient($event)"
+    >
       <div class="content__constructor">
         <div :class="['pizza', pizzaClassName]">
           <div class="pizza__wrapper">
-            <div
-              v-for="ingredients in selectedIngredients"
-              :key="ingredients.name"
-            >
-            <div
-              v-for="i in ingredients.quantity"
-              :key="i"
-              :class="`pizza__filling 
-                       pizza__filling--${quantityIngridientsClassName(i)} 
-                       pizza__filling--${ingredients.englishName}`"
-            >
-            </div>
-            </div>
+            <transition-group name="ingredient">
+              <div
+                v-for="ingredients in selectedIngredients"
+                :key="ingredients.name"
+              >
+                <transition-group name="ingredient-element">
+                  <div
+                    v-for="i in ingredients.quantity"
+                    :key="i"
+                    :class="`pizza__filling 
+                            pizza__filling--${quantityIngridientsClassName(i)} 
+                            pizza__filling--${ingredients.englishName}`"
+                  />
+                </transition-group>
+              </div>
+            </transition-group>
           </div>
         </div>
       </div>
@@ -89,4 +95,18 @@ export default {
 };
 </script>
 
-<style lang="scss" scoped></style>
+<style lang="scss" scoped>
+	.ingredient-enter-active,
+  .ingredient-leave-active,
+  .ingredient-element-enter-active,
+  .ingredient-element-leave-active {
+    transition: all 0.5s;
+  }
+
+  .ingredient-enter,
+  .ingredient-element-enter,
+  .ingredient-leave-to,
+  .ingredient-element-leave-to {
+    opacity: 0;
+  }
+</style>
