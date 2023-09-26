@@ -16,6 +16,7 @@ import AppLayoutHeader from "@/layouts/AppLayoutHeader";
 import AppLayoutSidebar from "@/layouts/AppLayoutSidebar";
 export default {
   name: "AppLayoutProfile",
+  
   components: {
     NotificationsContainer,
     AppLayoutHeader,

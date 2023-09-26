@@ -17,7 +17,7 @@
 
     <div 
       v-else 
-      :key="orders-list"
+      key="orders-list"
     >
       <section 
         v-for="order in orders" 
@@ -37,24 +37,30 @@
 <script>
 import { mapActions, mapState } from "vuex";
 import OrdersItem from "@/modules/orders/components/OrdersItem";
+
 export default {
-  name: "Orders",
+  name: "OrdersPage",
+
   components: {
     OrdersItem,
   },
+
   computed: {
     ...mapState("Cart", ["additionalItems"]),
     ...mapState("Orders", ["orders"]),
+
     isOrdersListEmpty() {
       return this.orders.length === 0;
     },
   },
+
   async mounted() {
     if (this.additionalItems.length === 0) {
       await this.fetchAdditionalItems();
     }
     await this.fetchOrders();
   },
+
   methods: {
     ...mapActions("Builder", ["fetchPizzaParts"]),
     ...mapActions("Cart", ["fetchAdditionalItems"]),

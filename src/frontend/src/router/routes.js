@@ -3,29 +3,29 @@ import { auth, isLoggedIn } from "@/middlewares";
 export default [
   {
     path: "/",
-    name: "IndexHome",
-    component: () => import("../views/Index.vue"),
+    name: "IndexPage",
+    component: () => import("../views/IndexPage.vue"),
     meta: {
       layout: 'AppLayoutMain' 
     },
   },
   {
     path: "/login",
-    name: "Login",
-    component: () => import("../views/Login.vue"),
+    name: "LoginPage",
+    component: () => import("../views/LoginPage.vue"),
     meta: {
       middlewares: [isLoggedIn],
     },
   },
   {
     path: "/cart",
-    name: "Cart",
-    component: () => import("../views/Cart.vue"),
+    name: "CartPage",
+    component: () => import("../views/CartPage.vue"),
   },
   {
     path: "/orders",
-    name: "Orders",
-    component: () => import("../views/Orders.vue"),
+    name: "OrdersPage",
+    component: () => import("../views/OrdersPage.vue"),
     meta: {
       layout: "AppLayoutProfile",
       middlewares: [auth],
@@ -33,8 +33,8 @@ export default [
   },
   {
     path: "/profile",
-    name: "Profile",
-    component: () => import("../views/Profile.vue"),
+    name: "ProfilePage",
+    component: () => import("../views/ProfilePage.vue"),
     meta: {
       layout: "AppLayoutProfile",
       middlewares: [auth],

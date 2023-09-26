@@ -1,17 +1,17 @@
 import { shallowMount, createLocalVue } from "@vue/test-utils";
 import { generateMockStore, setAddresses, setUser } from "@/store/mocks";
 import Vuex from "vuex";
-import Profile from "@/views/Profile";
+import ProfilePage from "@/views/ProfilePage";
 
 const localVue = createLocalVue();
 localVue.use(Vuex);
 
-describe("Profile", () => {
+describe("ProfilePage", () => {
   let actions;
   let store;
   let wrapper;
   const createComponent = (options) => {
-    wrapper = shallowMount(Profile, options);
+    wrapper = shallowMount(ProfilePage, options);
   };
 
   beforeEach(() => {

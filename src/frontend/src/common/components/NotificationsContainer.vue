@@ -17,6 +17,7 @@
 import { mapState } from "vuex";
 export default {
   name: "NotificationsContainer",
+  
   computed: {
     ...mapState(["notifications"]),
   },

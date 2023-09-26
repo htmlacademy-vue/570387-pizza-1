@@ -18,24 +18,29 @@
 import { getImageSources } from "@/common/utils";
 export default {
   name: "AppPicture",
+
   props: {
     src: {
       type: String,
       required: true,
     },
+
     alt: {
       type: String,
       required: true,
     },
+
     width: {
       type: [Number, String],
       required: true,
     },
+
     height: {
       type: [Number, String],
       required: true,
     },
   },
+  
   computed: {
     imageSources() {
       return getImageSources(this.src);

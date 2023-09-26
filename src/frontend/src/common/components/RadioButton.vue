@@ -15,15 +15,18 @@
 <script>
 export default {
   name: "RadioButton",
+
   props: {
     value: {
       type: String,
       required: true,
     },
+
     isChecked: {
       type: Boolean,
       required: true,
     },
+
     inputName: {
       type: String,
       required: true,
@@ -31,5 +34,3 @@ export default {
   },
 };
 </script>
-
-<style lang="scss" scoped></style>

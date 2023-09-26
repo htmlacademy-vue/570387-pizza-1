@@ -12,6 +12,7 @@
 import { DATA_TRANSFER_PAYLOAD } from "@/common/const";
 export default {
   name: "AppDrop",
+  
   methods: {
     onDrop({ dataTransfer }) {
       const payload = dataTransfer.getData(DATA_TRANSFER_PAYLOAD);

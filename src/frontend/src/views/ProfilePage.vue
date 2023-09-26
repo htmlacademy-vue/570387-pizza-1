@@ -73,21 +73,24 @@
 import ProfileUserBlock from "@/modules/profile/components/ProfileUserBlock";
 import ProfileAddressForm from "@/modules/profile/components/ProfileAddressForm";
 import { mapActions, mapState } from "vuex";
+
 export default {
-  name: "Profile",
+  name: "ProfilePage",
+
   components: {
     ProfileAddressForm,
     ProfileUserBlock,
   },
-  data() {
-    return {
-      isNewAddressFormDisplayed: false,
-      editableAddressId: null,
-    };
-  },
+
+  data: () => ({ 
+    isNewAddressFormDisplayed: false,
+    editableAddressId: null,
+  }),
+
   computed: {
     ...mapState("Auth", ["user"]),
     ...mapState("Addresses", ["addresses"]),
+
     newAddressData() {
       return {
         id: null,
@@ -100,24 +103,30 @@ export default {
       };
     },
   },
+
   async mounted() {
     await this.fetchAddresses();
   },
+
   methods: {
     ...mapActions("Addresses", ["fetchAddresses"]),
+
     getAddress(address) {
       return `${address.street}, ${address.building}${
         address.flat ? ", " + address.flat : ""
       }`;
     },
+
     openFormToEdit(id) {
       this.isNewAddressFormDisplayed = false;
       this.editableAddressId = id;
     },
+
     openNewAddressForm() {
       this.editableAddressId = null;
       this.isNewAddressFormDisplayed = true;
     },
+
     closeAddressForm() {
       this.isNewAddressFormDisplayed = false;
       this.editableAddressId = null;

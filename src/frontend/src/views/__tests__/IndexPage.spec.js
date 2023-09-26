@@ -1,13 +1,13 @@
 
 import { shallowMount } from "@vue/test-utils";
-import Index from "@/views/Index";
+import IndexPage from "@/views/IndexPage";
 
-describe("IndexView", () => {
+describe("IndexPage", () => {
   const stubs = ["router-view"];
 
   let wrapper;
   const createComponent = (options) => {
-    wrapper = shallowMount(Index, options);
+    wrapper = shallowMount(IndexPage, options);
   };
 
   afterEach(() => {
