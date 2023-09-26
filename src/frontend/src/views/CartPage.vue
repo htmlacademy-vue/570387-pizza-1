@@ -83,26 +83,24 @@ export default {
   
   mixins: [validator],
   
-  data() {
-    return {
-      isOrderPopupDisplayed: false,
-      address: null,
-      addressId: null,
-      phone: "",
+  data: () => ({
+    isOrderPopupDisplayed: false,
+    address: null,
+    addressId: null,
+    phone: "",
 
-      validations: {
-        street: {
-          error: "",
-          rules: ["required"],
-        },
-        
-        building: {
-          error: "",
-          rules: ["required"],
-        },
+    validations: {
+      street: {
+        error: "",
+        rules: ["required"],
       },
-    };
-  },
+
+      building: {
+        error: "",
+        rules: ["required"],
+      },
+    },
+  }),
 
   computed: {
     ...mapState("Cart", ["pizzaItems", "additionalItems"]),

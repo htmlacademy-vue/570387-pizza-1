@@ -61,24 +61,22 @@ export default {
   
   mixins: [validator],
   
-  data() {
-    return {
-      email: "",
-      password: "",
-      
-      validations: {
-        email: {
-          error: "",
-          rules: ["required", "email"],
-        },
-
-        password: {
-          error: "",
-          rules: ["required"],
-        },
+  data: () => ({
+    email: "",
+    password: "",
+    
+    validations: {
+      email: {
+        error: "",
+        rules: ["required", "email"],
       },
-    };
-  },
+
+      password: {
+        error: "",
+        rules: ["required"],
+      },
+    },
+  }),
   
   watch: {
     email() {

@@ -82,12 +82,10 @@ export default {
     ProfileUserBlock,
   },
 
-  data() {
-    return {
-      isNewAddressFormDisplayed: false,
-      editableAddressId: null,
-    };
-  },
+  data: () => ({ 
+    isNewAddressFormDisplayed: false,
+    editableAddressId: null,
+  }),
 
   computed: {
     ...mapState("Auth", ["user"]),
