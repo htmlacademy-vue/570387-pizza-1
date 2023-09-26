@@ -1,12 +1,12 @@
 import { mount, createLocalVue } from "@vue/test-utils";
 import { generateMockStore } from "@/store/mocks";
 import Vuex from "vuex";
-import Login from "@/views/Login";
+import LoginPage from "@/views/LoginPage";
 
 const localVue = createLocalVue();
 localVue.use(Vuex);
 
-describe("Login", () => {
+describe("LoginPage", () => {
   const mocks = {
     $router: {
       push: jest.fn(),
@@ -17,7 +17,7 @@ describe("Login", () => {
   let store;
   let wrapper;
   const createComponent = (options) => {
-    wrapper = mount(Login, options);
+    wrapper = mount(LoginPage, options);
   };
 
   beforeEach(() => {

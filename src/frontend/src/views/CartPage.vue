@@ -71,7 +71,8 @@ import CartOrderPopup from "@/modules/cart/components/CartOrderPopup";
 import CartFooter from "@/modules/cart/components/CartFooter";
 import { validator } from "@/common/mixins";
 export default {
-  name: "Cart",
+  name: "CartPage",
+  
   components: {
     CartProductList,
     CartAdditionalList,
@@ -79,18 +80,22 @@ export default {
     CartOrderPopup,
     CartFooter,
   },
+  
   mixins: [validator],
+  
   data() {
     return {
       isOrderPopupDisplayed: false,
       address: null,
       addressId: null,
       phone: "",
+
       validations: {
         street: {
           error: "",
           rules: ["required"],
         },
+        
         building: {
           error: "",
           rules: ["required"],
@@ -98,13 +103,16 @@ export default {
       },
     };
   },
+
   computed: {
     ...mapState("Cart", ["pizzaItems", "additionalItems"]),
     ...mapState("Auth", ["user"]),
+
     isCartEmpty() {
       return this.pizzaItems.length === 0;
     },
   },
+
   watch: {
     isCartEmpty(val) {
       if (val) {
@@ -113,13 +121,16 @@ export default {
       }
     },
   },
+
   async mounted() {
     this.addressId = this.$route.params.addressId;
   },
+
   methods: {
     ...mapActions("Builder", ["resetBuilderState", "fetchPizzaParts"]),
     ...mapActions("Cart", ["resetCartState", "fetchAdditionalItems"]),
     ...mapActions("Orders", ["createOrder"]),
+
     async makeNewOrder() {
       if (
         this.address !== null &&
@@ -141,6 +152,7 @@ export default {
       await this.createOrder(order);
       this.isOrderPopupDisplayed = true;
     },
+
     normalizePizzas() {
       return this.pizzaItems.map((pizza) => {
         return {
@@ -158,6 +170,7 @@ export default {
         };
       });
     },
+
     normalizeMisc() {
       return this.additionalItems.map((item) => {
         return {
@@ -166,15 +179,18 @@ export default {
         };
       });
     },
+
     closePopup() {
       this.isOrderPopupDisplayed = false;
     },
+
     async leavePage() {
       await this.resetBuilderState();
       await this.resetCartState();
       await this.fetchPizzaParts();
-      await this.$router.push({ name: this.user ? "Orders" : "IndexHome" });
+      await this.$router.push({ name: this.user ? "OrdersPage" : "IndexPage" });
     },
+
     setAddress({ phone, address }) {
       this.phone = phone;
       this.address = address;

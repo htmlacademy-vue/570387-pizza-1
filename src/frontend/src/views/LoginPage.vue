@@ -53,19 +53,25 @@
 import { validator } from "@/common/mixins";
 import AppInput from "@/common/components/AppInput";
 import { mapActions } from "vuex";
+
 export default {
-  name: "Login",
+  name: "LoginPage",
+
   components: { AppInput },
+  
   mixins: [validator],
+  
   data() {
     return {
       email: "",
       password: "",
+      
       validations: {
         email: {
           error: "",
           rules: ["required", "email"],
         },
+
         password: {
           error: "",
           rules: ["required"],
@@ -73,19 +79,24 @@ export default {
       },
     };
   },
+  
   watch: {
     email() {
       this.$clearValidationError("email");
     },
+
     password() {
       this.$clearValidationError("password");
     },
   },
+
   mounted() {
     this.$refs.email.$refs.input.focus();
   },
+
   methods: {
     ...mapActions("Auth", ["login"]),
+  
     async onSubmit() {
       if (
         !this.$validateFields(
@@ -101,6 +112,7 @@ export default {
       });
       await this.$router.push("/");
     },
+  
     closeDialog() {
       this.$router.push("/");
     },

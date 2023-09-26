@@ -2,7 +2,7 @@ import { shallowMount, createLocalVue } from "@vue/test-utils";
 import { generateMockStore, setPizzaItems } from "@/store/mocks";
 import $validator from "@/common/mixins/validator";
 import Vuex from "vuex";
-import Cart from "@/views/Cart";
+import CartPage from "@/views/CartPage";
 
 const localVue = createLocalVue();
 localVue.use(Vuex);
@@ -23,7 +23,7 @@ const testAddress = {
   comment: "Не звоните",
 };
 
-describe("Cart", () => {
+describe("CartPage", () => {
   const mocks = {
     $router: {
       push: jest.fn(),
@@ -38,7 +38,7 @@ describe("Cart", () => {
   let store;
   let wrapper;
   const createComponent = (options) => {
-    wrapper = shallowMount(Cart, options);
+    wrapper = shallowMount(CartPage, options);
   };
 
   beforeEach(() => {

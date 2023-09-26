@@ -58,13 +58,16 @@ import ItemCounter from "@/common/components/ItemCounter";
 
 export default {
   name: "BuilderIngredientsSelector",
+
   components: {
     ItemCounter,
     AppDrag,
     AppDrop
   },
+
   computed: {
     ...mapState("Builder", ["ingredients"]),
+    
     minIngredientValue() {
       return MIN_INGREDIENTS_VALUE;
     },
@@ -76,6 +79,7 @@ export default {
 
   methods: {
     ...mapActions("Builder", ["changeIngredientQuantity"]),
+
     checkIsIngredientDraggable(ingredient) {
       return ingredient.quantity < this.maxIngredientValue;
     },

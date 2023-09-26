@@ -11,6 +11,7 @@ import NotificationsContainer from "@/common/components/NotificationsContainer";
 import AppLayoutHeader from "@/layouts/AppLayoutHeader";
 export default {
   name: "AppLayoutDefault",
+  
   components: {
     NotificationsContainer,
     AppLayoutHeader,

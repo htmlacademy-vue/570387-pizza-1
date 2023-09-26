@@ -30,11 +30,13 @@
     components: {
       SelectorItem,
     },
+
     computed: {
     ...mapState("Builder", ["sauces"]),
-  },
-  methods: {
-    ...mapActions("Builder", ["changeSelectedItem"]),
-  },
+    },
+    
+    methods: {
+      ...mapActions("Builder", ["changeSelectedItem"]),
+    },
   }
 </script>

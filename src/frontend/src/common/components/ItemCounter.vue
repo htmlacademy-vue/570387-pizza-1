@@ -53,11 +53,11 @@ export default {
       default: false,
     },
   },
-  data: function () {
-    return {
-      counter: 0,
-    };
-  },
+
+  data: () => ({ 
+    counter: 0 
+  }),
+
   computed: {
     isMinusBtnDisabled() {
       return this.value === this.minValue;
@@ -66,16 +66,19 @@ export default {
     isPlusBtnDisabled() {
       return this.value === this.maxValue;
     },
-  },  
+  },
+
   methods: {
     actualCounter() {
       this.counter = this.value
       return this.counter
     },
+
     addItem() {
       this.counter++;
       this.$emit("changeItemValue", this.counter);
     },
+
     removeItem() {
       this.counter--;
       this.$emit("changeItemValue", this.counter);
@@ -83,5 +86,3 @@ export default {
   },
 };
 </script>
-
-<style lang="scss" scoped></style>
